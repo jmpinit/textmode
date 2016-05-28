@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Hello World!</title>
+        <style>
+        body {
+            font-family: monospace;
+        }
+
+        .textcoord {
+            margin: 0px;
+            position: absolute;
+            top: 100px;
+            left: 100px;
+            white-space: nowrap;
+        }
+
+        </style>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <canvas id="pop" class="textcoord" width="512" height="512"></canvas>
+        <p id="crunch" class="textcoord">hello<br>world</p>
+    </body>
+    <script>
+        "use strict";
+        require("./renderer.js");
+    </script>
+</html>

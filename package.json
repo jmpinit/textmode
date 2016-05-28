@@ -1,0 +1,14 @@
+{
+  "name": "textmode",
+  "version": "1.0.0",
+  "description": "Blog engine in textmode", 
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "author": "Owen Trueblood",
+  "license": "MIT",
+  "devDependencies": {
+    "electron-prebuilt": "^1.1.1"
+  }
+}
