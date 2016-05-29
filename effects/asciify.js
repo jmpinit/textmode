@@ -8,20 +8,30 @@ const signature = {
     target: "image",
 };
 
-const run = function(inputs, state = []) {
-    const ZOOM = 32;
-
-    const img = inputs;
-
+// resizes given image and returns new canvas
+const resize = function(image, width, height) {
     const canvas = document.createElement("canvas");
-    canvas.width = img.width / ZOOM;
-    canvas.height = img.height / ZOOM;
+    canvas.width = width;
+    canvas.height = height;
 
     const ctx = canvas.getContext("2d");
-    const ratio = character.height / character.width;
-    ctx.scale(1 / ZOOM, 1 / (ZOOM * ratio));
-    ctx.drawImage(img, 0, 0);
+    ctx.scale(width / image.width, height / image.height);
+    ctx.drawImage(image, 0, 0);
 
+    return canvas;
+};
+
+const run = function(inputs) {
+    const ZOOM = 32;
+
+    const img = inputs[0];
+
+    const ratio = character.height / character.width;
+    const newWidth = img.width / ZOOM;
+    const newHeight = img.height / (ZOOM * ratio);
+    const canvas = resize(img, newWidth, newHeight);
+
+    const ctx = canvas.getContext("2d");
     const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
     const chars = ".:-=+*#%@";

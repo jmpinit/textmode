@@ -1,29 +1,29 @@
+// build and manage an fx graph
+
 "use strict";
 
-const effect = require("./effects/asciify"); // FIXME don't harcode
+const EventEmitter = require("events").EventEmitter;
+const async = require("async");
+const resource = require("./resource");
 
-const go = function() {
-    const img = document.createElement("img");
-    img.src = "http://i.imgur.com/ktvQaa4.jpg";
-    img.onload = function() {
-        const canvas = document.createElement("canvas");
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0);
+const plug = function(effectName, urls) {
+    const emitter = new EventEmitter();
+    const effect = require(`./effects/${effectName}`);
 
-        const frame = effect.run(canvas);
-
-        const textbox = document.getElementById("crunch");
-
-        textbox.innerHTML = "";
-        for (let y = 0; y < frame.text.length; y += frame.width) {
-            const row = frame.text.slice(y, y + frame.width);
-            textbox.innerHTML += `${row}<br>`;
-        }
+    const ticker = function(resources) {
+        return () => emitter.emit("frame", effect.run(resources));
     };
+
+    async.map(urls, (url, done) => {
+        resource.load(url, done);
+    },
+    (err, resources) => {
+        setInterval(ticker(resources), 1000);
+    });
+
+    return emitter;
 };
 
 module.exports = {
-    go,
+    plug,
 };
