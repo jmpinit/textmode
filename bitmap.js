@@ -40,8 +40,14 @@ const makeBitmap = function(width, height) {
         return dataArray;
     };
 
+    let imageData;
+
     const toImageData = function() {
-        return new ImageData(toTypedArray(), width, height);
+        if (imageData === undefined) {
+            imageData = new ImageData(toTypedArray(), width, height);
+        }
+
+        return imageData;
     };
 
     const toCanvas = function() {

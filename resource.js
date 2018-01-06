@@ -2,6 +2,8 @@
 
 "use strict";
 
+const path = require("path");
+
 const loadImage = function(url, done) {
     const img = document.createElement("img");
 
@@ -45,13 +47,18 @@ const decode = function(url) {
 const load = function(url, done) {
     const info = decode(url);
 
-    if (info.protocol === "http:") {
-        if (endsWithAnyOf(info.pathname, [".png", ".jpg", ".gif", ".bmp"])) {
-            loadImage(url, done);
-        }
-    }
-    else {
-        throw new Error(`Unrecognized resource protocol ${info.protocol}`);
+    switch (info.protocol) {
+        case "http:":
+            if (endsWithAnyOf(info.pathname, [".png", ".jpg", ".gif", ".bmp"])) {
+                loadImage(url, done);
+            } break;
+        case "js:":
+            {
+                const modulePath = `./${path.join("./resources", info.pathname)}`;
+                done(null, require(modulePath));
+            } break;
+        default:
+            throw new Error(`Unrecognized resource protocol ${info.protocol}`);
     }
 };
 

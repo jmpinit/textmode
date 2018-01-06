@@ -18,7 +18,7 @@ const plug = function(effectName, urls) {
         resource.load(url, done);
     },
     (err, resources) => {
-        setInterval(ticker(resources), 1000);
+        setInterval(ticker(resources), 16);
     });
 
     return emitter;
